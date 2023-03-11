@@ -1,0 +1,30 @@
+.header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px;
+  height: 10vh;
+  background-color: grey;
+}
+.unordered-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.list-item {
+  color: white;
+  margin: 12px;
+  list-style-type: none;
+}
+.logout-button {
+  background-color: blue;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  border-width: 0px;
+}
+.link-item {
+  text-decoration: none;
+  color: white;
+}
