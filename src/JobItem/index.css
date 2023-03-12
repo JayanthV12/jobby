@@ -1,0 +1,62 @@
+.job-card {
+  background-color: grey;
+  border-radius: 12px;
+  padding: 12px;
+  height: 500px;
+  width: 900px;
+  margin: 20px;
+}
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.title {
+  font-family: 'Roboto';
+  font-size: 32px;
+  font-weight: 500;
+  color: white;
+}
+.para {
+  font-family: 'Roboto';
+  font-size: 26px;
+
+  color: white;
+}
+.logo {
+  height: 100px;
+  width: 100px;
+  margin-right: 12px;
+}
+.rating-container {
+  display: flex;
+  flex-direction: row;
+  padding-right: 12px;
+}
+.star {
+  align-self: center;
+  height: 40px;
+  color: yellow;
+  margin-right: 10px;
+}
+.location {
+  align-self: center;
+  height: 40px;
+  color: white;
+  margin-right: 10px;
+}
+.location-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.job-location {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.description {
+  font-family: 'Roboto';
+  font-size: 16px;
+  color: white;
+}

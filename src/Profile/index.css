@@ -1,0 +1,19 @@
+.profile-container {
+  background-image: url('https://assets.ccbp.in/frontend/react-js/profile-bg.png');
+  height: 200px;
+  width: 400px;
+  background-size: cover;
+  margin-left: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+.profile-fail {
+  background-color: black;
+}
+.retry-button {
+  background-color: blue;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  border-width: 0px;
+}
