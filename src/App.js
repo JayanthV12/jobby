@@ -1,14 +1,15 @@
-import {Route, Switch} from 'react-router-dom'
-
-import Login from './Login'
-import Home from './Home'
-import ProtectedRoute from './ProtectedRoute'
-import JobDetails from './JobDetails'
-
 import './App.css'
-import Jobs from './Jobs'
 
-// These are the lists used in the application. You can move them to any component needed.
+import {Switch, Route, Redirect} from 'react-router-dom'
+
+import LoginRoute from './LoginRoute'
+import ProtectedRoute from './ProtectedRoute'
+import HomeRoute from './HomeRoute'
+import JobsRoute from './JobsRoute'
+import jobDetailsRoute from './JobDetailsRoute'
+import NotFound from './NotFound'
+
+//  These are the lists used in the application. You can move them to any component needed.
 const employmentTypesList = [
   {
     label: 'Full Time',
@@ -49,12 +50,25 @@ const salaryRangesList = [
 
 // Replace your code here
 const App = () => (
-  <Switch>
-    <Route exact path="/login" component={Login} />
-    <ProtectedRoute exact path="/" component={Home} />
-    <ProtectedRoute exact path="/jobs" component={Jobs} />
-    <ProtectedRoute exact path="/jobs/:id" component={JobDetails} />
-  </Switch>
+  <>
+    <Switch>
+      <Route exact path="/login" component={LoginRoute} />
+      <ProtectedRoute exact path="/" component={HomeRoute} />
+      <ProtectedRoute
+        exact
+        path="/jobs"
+        render={() => (
+          <JobsRoute
+            salaryRangesList={salaryRangesList}
+            employmentTypesList={employmentTypesList}
+          />
+        )}
+      />
+      <ProtectedRoute exact path="/jobs/:id" component={jobDetailsRoute} />
+      <Route path="/not-found" component={NotFound} />
+      <Redirect to="not-found" />
+    </Switch>
+  </>
 )
 
 export default App

@@ -1,100 +1,106 @@
-import Cookies from 'js-cookie'
-
 import {Component} from 'react'
-
+import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import './index.css'
 
-const apiStatus = {
+const apiStatusConstants = {
+  initial: 'INITIAL',
   success: 'SUCCESS',
   failure: 'FAILURE',
-  initial: 'INITIAL',
+  inProgress: 'IN_PROGRESS',
 }
 
 class Profile extends Component {
-  state = {
-    profileStatus: apiStatus.initial,
-    profileDetails: {},
-  }
+  state = {apiStatus: apiStatusConstants.initial, profileDetails: {}}
 
   componentDidMount() {
     this.getProfileDetails()
   }
 
-  renderSuccessProfile = () => {
-    const {profileDetails} = this.state
-    const {name, shortBio, profileImageUrl} = profileDetails
-    return (
-      <div className="profile-container">
-        <img src={`${profileImageUrl}`} alt="profile" />
-        <h1>{name}</h1>
-        <p>{shortBio}</p>
-      </div>
-    )
-  }
-
-  renderFailureProfile = () => {
-    const onClickRetry = () => {
-      this.getProfileDetails()
+  getProfileDetails = async () => {
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+    const jwtToken = Cookies.get('jwt_token')
+    const url = 'https://apis.ccbp.in/profile'
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
     }
-    return (
-      <div className="profile-fail">
-        <button type="button" className="retry-button" onClick={onClickRetry}>
-          Retry
-        </button>
-      </div>
-    )
+    const response = await fetch(url, options)
+    if (response.ok) {
+      const fetchedData = await response.json()
+      const formattedProfileDetails = {
+        name: fetchedData.profile_details.name,
+        profileImageUrl: fetchedData.profile_details.profile_image_url,
+        shortBio: fetchedData.profile_details.short_bio,
+      }
+      this.setState({
+        profileDetails: formattedProfileDetails,
+        apiStatus: apiStatusConstants.success,
+      })
+    } else {
+      this.setState({apiStatus: apiStatusConstants.failure})
+    }
   }
 
-  renderOutput = () => {
-    const {profileStatus} = this.state
-    console.log(profileStatus)
+  onClickRetry = () => {
+    this.getProfileDetails()
+  }
 
-    switch (profileStatus) {
-      case apiStatus.success:
-        return this.renderSuccessProfile()
-      case apiStatus.failure:
-        return this.renderFailureProfile()
+  renderProfileDetails = () => {
+    const {apiStatus} = this.state
+    switch (apiStatus) {
+      case apiStatusConstants.inProgress:
+        return this.renderLoadingView()
+      case apiStatusConstants.success:
+        return this.renderProfile()
+      case apiStatusConstants.failure:
+        return this.renderFailureView()
       default:
         return null
     }
   }
 
-  getProfileDetails = async () => {
-    const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/profile'
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    }
-    const response = await fetch(apiUrl, options)
-    const data = await response.json()
-    const fetchedData = data.profile_details
-    const updatedData = {
-      name: fetchedData.name,
-      shortBio: fetchedData.short_bio,
-      profileImageUrl: fetchedData.profile_image_url,
-    }
-
-    if (response.ok === true) {
-      this.setState(
-        {
-          profileStatus: apiStatus.success,
-          profileDetails: updatedData,
-        },
-        this.renderOutput,
-      )
-    } else {
-      this.setState(
-        {profileStatus: apiStatus.failure, profileDetails: ''},
-        this.renderOutput,
-      )
-    }
+  renderProfile = () => {
+    const {profileDetails} = this.state
+    return (
+      <div className="profile-container">
+        <div className="profile-content-container">
+          <img
+            src={profileDetails.profileImageUrl}
+            className="profile-image"
+            alt="profile-icon"
+          />
+          <h1 className="user-name">{profileDetails.name}</h1>
+          <p className="occupation">{profileDetails.shortBio}</p>
+        </div>
+      </div>
+    )
   }
 
+  renderLoadingView = () => (
+    // below comment used to disable eslint for testId line
+    // eslint-disable-next-line react/no-unknown-property
+    <div className="profile-loader-container" testid="loader">
+      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
+    </div>
+  )
+
+  renderFailureView = () => (
+    <div className="failure-view-container">
+      <button
+        type="button"
+        className="retry-button"
+        onClick={this.onClickRetry}
+      >
+        Retry
+      </button>
+    </div>
+  )
+
   render() {
-    return <div>{this.renderOutput()}</div>
+    return <> {this.renderProfileDetails()}</>
   }
 }
 

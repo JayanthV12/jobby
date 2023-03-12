@@ -1,81 +1,48 @@
-import {BsFillBriefcaseFill} from 'react-icons/bs'
-import {GoLocation} from 'react-icons/go'
-import {AiFillStar} from 'react-icons/ai'
+import {Link} from 'react-router-dom'
+import {BsBriefcaseFill, BsFillStarFill} from 'react-icons/bs'
+import {MdLocationOn} from 'react-icons/md'
 
 import './index.css'
 
 const JobItem = props => {
-  const {jobItem} = props
-  const {
-    companyLogoUrl,
-    employmentType,
-    jobDescription,
-    location,
-    packagePerAnnum,
-    rating,
-    title,
-  } = jobItem
-
-  const renderJobItem = () => (
-    <div className="job-card">
-      <div className="logo-container">
-        <img src={`${companyLogoUrl}`} alt="logo" className="logo" />
-        <div>
-          <h1 className="title">{title}</h1>
-          <div className="rating-container">
-            <AiFillStar className="star" />
-            <p className="para">{rating}</p>
-          </div>
-        </div>
-      </div>
-      <div className="job-location">
-        <div className="location-type">
-          <div className="rating-container">
-            <GoLocation className="location" />
-            <p className="para">{location}</p>
-          </div>
-          <div className="rating-container">
-            <BsFillBriefcaseFill className="location" />
-            <p className="para">{employmentType}</p>
-          </div>
-        </div>
-        <p className="para">{packagePerAnnum}</p>
-      </div>
-      <hr />
-      <h1 className="heading">Description</h1>
-      <p className="description">{jobDescription}</p>
-    </div>
-  )
-
+  const {jobDetails} = props
   return (
-    <div className="job-card">
-      <div className="logo-container">
-        <img src={`${companyLogoUrl}`} alt="logo" className="logo" />
-        <div>
-          <h1 className="title">{title}</h1>
-          <div className="rating-container">
-            <AiFillStar className="star" />
-            <p className="para">{rating}</p>
+    <Link to={`/jobs/${jobDetails.id}`} className="link">
+      <li className="job-item">
+        <div className="company-logo-and-heading-container">
+          <img
+            src={jobDetails.companyLogoUrl}
+            className="job-company-logo"
+            alt="company logo"
+          />
+          <div className="company-heading-and-rating-container">
+            <h1 className="company-heading">{jobDetails.title}</h1>
+            <div className="rating-container">
+              <BsFillStarFill className="star-icon" />
+              <p className="rating-text">{jobDetails.rating}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="job-location">
-        <div className="location-type">
-          <div className="rating-container">
-            <GoLocation className="location" />
-            <p className="para">{location}</p>
+        <div className="location-and-package-container">
+          <div className="location-and-employment-type-container">
+            <div className="location-container">
+              <MdLocationOn className="location-icon" />
+              <p className="location-text">{jobDetails.location}</p>
+            </div>
+            <div className="employment-type-container">
+              <BsBriefcaseFill className="briefcase-icon" />
+              <p className="employment-text">{jobDetails.employmentType}</p>
+            </div>
           </div>
-          <div className="rating-container">
-            <BsFillBriefcaseFill className="location" />
-            <p className="para">{employmentType}</p>
-          </div>
+          <p className="package-text">{jobDetails.packagePerAnnum}</p>
         </div>
-        <p className="para">{packagePerAnnum}</p>
-      </div>
-      <hr />
-      <h1 className="heading">Description</h1>
-      <p className="description">{jobDescription}</p>
-    </div>
+        <hr className="job-horizontal-line" />
+        <>
+          <h1 className="description-heading">Description</h1>
+          <p className="description-info">{jobDetails.jobDescription}</p>
+        </>
+      </li>
+    </Link>
   )
 }
 

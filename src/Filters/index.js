@@ -38,51 +38,61 @@ const salaryRangesList = [
 ]
 
 const Filters = props => {
-  const {onEmployee, onSalary} = props
-  const onSelectSalary = event => {
-    onSalary(event.target.id)
+  const {selectedSalaryRange, selectedEmploymentType} = props
+  const onSelectSalaryRange = event => {
+    selectedSalaryRange(event.target.id)
   }
-
-  const onSelectEmployee = event => {
-    onEmployee(event.target.id)
+  const onSelectEmploymentType = event => {
+    selectedEmploymentType(event.target.checked, event.target.id)
   }
-
-  return (
-    <>
-      <ul className="employee-type">
-        <h1 className="employ-heading">Type of Employment</h1>
-        {employmentTypesList.map(each => (
-          <li>
+  const renderTypeOfEmploymentSection = () => (
+    <div className="type-of-employment-container">
+      <h1 className="filter-type-heading">Type of Employment</h1>
+      <ul className="list-items-container">
+        {employmentTypesList.map(eachType => (
+          <li key={eachType.employmentTypeId} className="list-item">
             <input
+              className="checkbox-input"
               type="checkbox"
-              id={`${each.employmentTypeId}`}
-              key={each.employmentTypeId}
-              onChange={onSelectEmployee}
+              id={eachType.employmentTypeId}
+              onChange={onSelectEmploymentType}
             />
-            <label htmlFor={`${each.employmentTypeId}`} className="list-item">
-              {each.label}
+            <label className="label-text" htmlFor={eachType.employmentTypeId}>
+              {eachType.label}
             </label>
           </li>
         ))}
       </ul>
-      <hr />
-      <ul className="employee-type">
-        <h1 className="employ-heading">Type of Employment</h1>
-        {salaryRangesList.map(each => (
-          <li>
+    </div>
+  )
+  const renderSalaryRanges = () => (
+    <div className="salary-ranges-container">
+      <h1 className="filter-type-heading"> Salary Range</h1>
+      <ul className="list-items-container">
+        {salaryRangesList.map(eachRange => (
+          <li key={eachRange.salaryRangeId} className="list-item">
             <input
+              className="radio-input"
               type="radio"
-              id={`${each.salaryTypeId}`}
-              onChange={onSelectSalary}
+              name="salary"
+              id={eachRange.salaryRangeId}
+              onChange={onSelectSalaryRange}
             />
-            <label htmlFor={`${each.employmentTypeId}`} className="list-item">
-              {each.label}
+            <label className="label-text" htmlFor={eachRange.salaryRangeId}>
+              {eachRange.label}
             </label>
           </li>
         ))}
       </ul>
-      <hr />
-    </>
+    </div>
+  )
+  return (
+    <div className="filter-container">
+      {renderTypeOfEmploymentSection()}
+      <hr className="horizontal-line" />
+      {renderSalaryRanges()}
+    </div>
   )
 }
+
 export default Filters
